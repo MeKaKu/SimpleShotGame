@@ -39,11 +39,12 @@
      <Compile Include="Assets\Scripts\PlayerController.cs" />
      <Compile Include="Assets\Scripts\Projectile.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
+     <Compile Include="Assets\Scripts\IDamageable.cs" />
      <Compile Include="Assets\Scripts\GunController.cs" />
      <Compile Include="Assets\Scripts\Gun.cs" />
-     <Compile Include="Assets\Scripts\Enemy.cs" />
-     <Compile Include="Assets\Scripts\IDamageable.cs" />
      <Compile Include="Assets\Scripts\People.cs" />
+     <Compile Include="Assets\Scripts\Enemy.cs" />
+     <Compile Include="Assets\Scripts\Spawner.cs" />
      <None Include="Assets\Shaders\ToonShader.shader" />
     <Reference Include="UnityEngine">
         <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.25f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>

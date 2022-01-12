@@ -25,7 +25,7 @@ public class Projectile : MonoBehaviour
         }
     }
     void OnHitObject(RaycastHit hit){
-        print(hit.collider.gameObject.name);
+        //print(hit.collider.gameObject.name);
         IDamageable damageObject = hit.collider.gameObject.GetComponent<IDamageable>();
         if(damageObject!=null){
             damageObject.TakeHit(damage,hit);

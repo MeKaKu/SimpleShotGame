@@ -8,6 +8,8 @@ public class People : MonoBehaviour, IDamageable
     protected float health;
     protected bool dead;
 
+    public event System.Action OnDeath;//事件委托
+
     protected virtual void Start() {
         health = startingHealth;
     }
@@ -19,6 +21,7 @@ public class People : MonoBehaviour, IDamageable
     }
     void Die(RaycastHit hit){
         dead = true;
+        OnDeath();
         Destroy(hit.collider.gameObject);
     }
 }
