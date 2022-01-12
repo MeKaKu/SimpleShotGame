@@ -4,14 +4,15 @@ using UnityEngine;
 
 [RequireComponent(typeof(PlayerController))]
 [RequireComponent(typeof(GunController))]
-public class Player : MonoBehaviour {
+public class Player : People {
 
     public float moveSpeed = 5;
     PlayerController controller;
     GunController gunController;
     Camera viewCamera;
     // Start is called before the first frame update
-    void Start(){
+    protected override void Start(){
+        base.Start();
         controller = GetComponent<PlayerController>();
         gunController = GetComponent<GunController>();
         viewCamera = Camera.main;
@@ -34,10 +35,10 @@ public class Player : MonoBehaviour {
             //Debug.DrawLine(ray.origin,point,Color.red);
             controller.LookAt(point);
         }
-
         //武器
         if(Input.GetMouseButton(0)){
             gunController.Shoot();
         }
     }
+
 }
