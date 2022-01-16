@@ -14,14 +14,19 @@ public class People : MonoBehaviour, IDamageable
         health = startingHealth;
     }
     public void TakeHit(float damage,RaycastHit hit){
+        TakeDamage(damage);
+    }
+    public void TakeDamage(float damage){
         health -= damage;
         if(health<=0 && !dead){
-            Die(hit);
+            Die();
         }
     }
-    void Die(RaycastHit hit){
+    void Die(){
         dead = true;
-        OnDeath();
-        Destroy(hit.collider.gameObject);
+        if(OnDeath!=null){
+            OnDeath();
+        }
+        Destroy(gameObject);
     }
 }
