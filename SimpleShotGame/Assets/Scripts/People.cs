@@ -22,6 +22,7 @@ public class People : MonoBehaviour, IDamageable
             Die();
         }
     }
+    [ContextMenu("Commit Suicide")]
     void Die(){
         dead = true;
         if(OnDeath!=null){

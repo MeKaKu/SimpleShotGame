@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,18 +14,30 @@ public class MapGenerator : MonoBehaviour
     public Transform navmeshFloor;//导航网格
     public Vector2 navSize;//导航区域的大小
     //public Transform navmeshMasker;//空气墙
-    List<Coord> tileCoords;
-    Queue<Coord> randomTileCoords;
+    List<Coord> tileCoords;//所有的坐标
+    Queue<Coord> randomTileCoords;//打乱的坐标
+    Queue<Coord> randomOpenTileCoords;//打乱的空格子的坐标
+    Transform[,] tiles;//地板
     public Map[] maps;//地图数组
     public int mapIndex;
     Map currentMap;
+    Spawner spawner;
     private void Start() {
-        GenerateMap();
+        //GenerateMap();
+        //spawner = FindObjectOfType<Spawner>();
+        //spawner.OnNewWave += OnNewWave;
     }
+    // void OnNewWave(int newWaveIndex){
+    //     mapIndex = newWaveIndex - 1;
+    //     print(newWaveIndex);
+    //     GenerateMap();
+    // }
     public void GenerateMap(){
         currentMap = maps[mapIndex];//当前生成的地图
         System.Random rand = new System.Random(currentMap.seed);//获取一个随机数序列
-        GetComponent<BoxCollider>().size = new Vector3(currentMap.mapSize.x * scale, .05f, currentMap.mapSize.y * scale);
+        GetComponent<BoxCollider>().size = new Vector3(currentMap.mapSize.x * scale, .05f, currentMap.mapSize.y * scale);//设置地图碰撞盒的大小
+        tiles = new Transform[currentMap.mapSize.x, currentMap.mapSize.y];
+
 
         string mapHolderName = "Generated Map";//地图存放的文件夹的名字
         if(transform.Find(mapHolderName)){//已经存在地图
@@ -40,6 +54,7 @@ public class MapGenerator : MonoBehaviour
                 Transform newTile = Instantiate(tilePrefab,tilePosition,Quaternion.Euler(Vector3.right*90)) as Transform;
                 newTile.localScale = Vector3.one*(1-outlinePercent) * scale;//地板大小
                 newTile.parent = mapHolder;
+                tiles[x,y] = newTile;
             }
         }
 
@@ -81,6 +96,17 @@ public class MapGenerator : MonoBehaviour
             }
         }
 
+        //没有障碍物的格子
+        List<Coord> openTileCoords = new List<Coord>();
+        for(int i = 0; i < currentMap.mapSize.x; i++){
+            for(int j = 0; j < currentMap.mapSize.y; j++){
+                if(!obstacles[i, j]){
+                    openTileCoords.Add(new Coord(i, j));
+                }
+            }
+        }
+        randomOpenTileCoords = new Queue<Coord>(Utility.ShuffleArray<Coord>(openTileCoords.ToArray(),currentMap.seed));
+        //print(randomOpenTileCoords.Count);
         //导航网格
         navSize = new Vector2(currentMap.mapSize.x, currentMap.mapSize.y);
         navmeshFloor.localScale = new Vector3(navSize.x,navSize.y) * scale;
@@ -113,10 +139,29 @@ public class MapGenerator : MonoBehaviour
     bool InGrid(int x,int y){
         return x >=0 && y >= 0 && x < currentMap.mapSize.x && y < currentMap.mapSize.y;
     }
-    Coord GetRandomCoord(){//获取随机坐标
+    //获取随机坐标
+    Coord GetRandomCoord(){
         Coord randomCoord = randomTileCoords.Dequeue();//从随机序列里面获取
         randomTileCoords.Enqueue(randomCoord);
         return randomCoord;
+    }
+    //随机获取空格子
+    public Transform GetRandomOpenCoord(){
+        Coord randomCoord = randomOpenTileCoords.Dequeue();//从随机序列里面获取
+        randomOpenTileCoords.Enqueue(randomCoord);
+        return tiles[randomCoord.x, randomCoord.y];
+    }
+    //根据坐标获取位置
+    Vector3 CoordToPos(int x,int y){
+        return new Vector3(-currentMap.mapSize.x/2 + x + (currentMap.mapSize.x%2==0?.5f:0), 0, -currentMap.mapSize.y/2 + y + (currentMap.mapSize.y%2==0?.5f:0)) * scale;
+    }
+    //根据位置获取格子
+    public Transform PosToTile(Vector3 pos){
+        int x = Mathf.RoundToInt(currentMap.mapSize.x/2 + pos.x/scale - (currentMap.mapSize.x%2==0?.4f:0));
+        int y = Mathf.RoundToInt(currentMap.mapSize.y/2 + pos.z/scale - (currentMap.mapSize.y%2==0?.4f:0));
+        x = Mathf.Clamp(x, 0, tiles.GetLength(0) - 1);
+        y = Mathf.Clamp(y, 0, tiles.GetLength(1) - 1);
+        return tiles[x, y];
     }
     [System.Serializable]
     public struct Coord{//坐标结构体
@@ -131,10 +176,6 @@ public class MapGenerator : MonoBehaviour
         public static bool operator == (Coord a,Coord b){
             return a.x==b.x && a.y==b.y;
         }
-    }
-
-    Vector3 CoordToPos(int x,int y){
-        return new Vector3(-currentMap.mapSize.x/2 + x + (currentMap.mapSize.x%2==0?.5f:0), 0, -currentMap.mapSize.y/2 + y + (currentMap.mapSize.y%2==0?.5f:0)) * scale;
     }
 
     //地图类，存放地图的属性
