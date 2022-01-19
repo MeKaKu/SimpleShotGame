@@ -18,7 +18,7 @@ public class Projectile : MonoBehaviour
         //检测子弹是否在产生时就在碰撞体内，
         Collider[] colliders = Physics.OverlapSphere(transform.position,.1f,layerMask);//在半径为.1f为半径的球内否覆盖的碰撞体
         if(colliders.Length>0){//在碰撞体内
-            OnHitObject(colliders[0]);
+            OnHitObject(colliders[0], transform.position);
         }
     }
 
@@ -31,22 +31,15 @@ public class Projectile : MonoBehaviour
         Ray ray = new Ray(transform.position,transform.forward); //子弹向前投射射线
         RaycastHit hit;
         if(Physics.Raycast(ray,out hit,moveDistance,layerMask,QueryTriggerInteraction.Collide)){//如果在移动距离内碰到了物体
-            OnHitObject(hit);
+            OnHitObject(hit.collider, hit.point);
         }
     }
-    void OnHitObject(RaycastHit hit){
-        //print(hit.collider.gameObject.name);
-        IDamageable damageObject = hit.collider.gameObject.GetComponent<IDamageable>();
-        if(damageObject!=null){
-            damageObject.TakeHit(damage,hit);
-        }
-        Destroy(gameObject);
-    }
-    void OnHitObject(Collider collider){
+    //击中物体时
+    void OnHitObject(Collider collider, Vector3 hitPoint){
         //print(hit.collider.gameObject.name);
         IDamageable damageObject = collider.gameObject.GetComponent<IDamageable>();
         if(damageObject!=null){
-            damageObject.TakeDamage(damage);
+            damageObject.TakeHit(damage, hitPoint, transform.forward);
         }
         Destroy(gameObject);
     }
