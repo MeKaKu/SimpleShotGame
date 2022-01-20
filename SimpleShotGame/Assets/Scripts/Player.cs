@@ -7,6 +7,7 @@ using UnityEngine;
 public class Player : People {
 
     public float moveSpeed = 5;
+    public CrossController cross;
     PlayerController controller;
     GunController gunController;
     Camera viewCamera;
@@ -28,12 +29,14 @@ public class Player : People {
 
         //朝向
         Ray ray = viewCamera.ScreenPointToRay(Input.mousePosition);//从摄像机到屏幕上面的点的射线
-        Plane groundPlane = new Plane(Vector3.up,Vector3.zero);
+        Plane groundPlane = new Plane(Vector3.up,Vector3.up * gunController.gunHeight);
         float rayDist;
         if(groundPlane.Raycast(ray,out rayDist)){
             Vector3 point = ray.GetPoint(rayDist);//与地面的交点
             //Debug.DrawLine(ray.origin,point,Color.red);
             controller.LookAt(point);
+            cross.transform.position = point;
+            cross.DetectTargets(ray);
         }
         //武器
         if(Input.GetMouseButton(0)){
