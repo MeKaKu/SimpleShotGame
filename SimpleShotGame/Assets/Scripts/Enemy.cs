@@ -36,6 +36,15 @@ public class Enemy : People
         FindTarget();//寻找目标
     }
 
+    //设置敌人的属性
+    public void SetCharacteristics(float _health, float _speed, float _damage, Color _skinColor){
+        startingHealth = _health;//HP
+        pathFinder = GetComponent<NavMeshAgent>();
+        pathFinder.speed = _speed;//移动速度
+        damage = _damage;//攻击力
+        GetComponent<Renderer>().material.color = _skinColor;//敌人的颜色
+    }
+
     private void Update() {
         if(haveTarget){
             if(Time.time > nextAttackTime){
@@ -103,7 +112,9 @@ public class Enemy : People
     public override void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection){
         if(damage >= health){
             //print("start lifetime : "+deathEffect.main.startLifetimeMultiplier);
-            Destroy(Instantiate<ParticleSystem>(deathEffect, hitPoint, Quaternion.FromToRotation(Vector3.forward, hitDirection)), deathEffect.main.startLifetimeMultiplier);
+            ParticleSystem effect = Instantiate<ParticleSystem>(deathEffect, hitPoint, Quaternion.FromToRotation(Vector3.forward, hitDirection));
+            effect.GetComponent<Renderer>().material.color = originColor;
+            Destroy(effect, deathEffect.main.startLifetimeMultiplier);
         }
         base.TakeHit(damage, hitPoint, hitDirection);
     }

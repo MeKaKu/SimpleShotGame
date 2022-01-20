@@ -7,20 +7,21 @@ using UnityEngine;
 public class MapGenerator : MonoBehaviour
 {
     public Transform tilePrefab;//地板的预制体
-    public Transform obstaclePrefab;
+    public Transform obstaclePrefab;//障碍物的预制体
     public float scale = 1; //地图缩放比例
     [Range(0,1)]
     public float outlinePercent;//地板外轮廓大小
     public Transform navmeshFloor;//导航网格
-    public Vector2 navSize;//导航区域的大小
-    //public Transform navmeshMasker;//空气墙
+    public Vector2 maxSize;//导航区域的大小
+    public Transform navmeshMasker;//空气墙
+    public Transform backGround;//地图背景
     List<Coord> tileCoords;//所有的坐标
     Queue<Coord> randomTileCoords;//打乱的坐标
     Queue<Coord> randomOpenTileCoords;//打乱的空格子的坐标
     Transform[,] tiles;//地板
     public Map[] maps;//地图数组
     public int mapIndex;
-    Map currentMap;
+    Map currentMap;//当前生成的地图
     Spawner spawner;
     private void Start() {
         //GenerateMap();
@@ -107,9 +108,26 @@ public class MapGenerator : MonoBehaviour
         }
         randomOpenTileCoords = new Queue<Coord>(Utility.ShuffleArray<Coord>(openTileCoords.ToArray(),currentMap.seed));
         //print(randomOpenTileCoords.Count);
-        //导航网格
-        navSize = new Vector2(currentMap.mapSize.x, currentMap.mapSize.y);
-        navmeshFloor.localScale = new Vector3(navSize.x,navSize.y) * scale;
+
+        //地图黑色背景
+        backGround.localScale = new Vector3(currentMap.mapSize.x, currentMap.mapSize.y) * scale;
+        //导航网格（静态烘焙的导航区域的大小）
+        navmeshFloor.localScale = new Vector3(maxSize.x,maxSize.y) * scale;
+
+        //剔除地图四周的导航区域
+        //左，
+        Transform leftMasker = Instantiate<Transform>(navmeshMasker, new Vector3(-(float)currentMap.mapSize.x/4 -maxSize.x/4, 0, 0) * scale, Quaternion.Euler(90,0,0), mapHolder);
+        leftMasker.localScale = new Vector3(maxSize.x/2 - (float)currentMap.mapSize.x/2, maxSize.y) * scale;
+        //右
+        Transform rightMasker = Instantiate<Transform>(navmeshMasker, new Vector3((float)currentMap.mapSize.x/4 +maxSize.x/4, 0, 0) * scale, Quaternion.Euler(90,0,0), mapHolder);
+        rightMasker.localScale = new Vector3(maxSize.x/2 - (float)currentMap.mapSize.x/2, maxSize.y) * scale;
+        //上
+        Transform topMasker = Instantiate<Transform>(navmeshMasker, new Vector3(0, 0, (float)currentMap.mapSize.y/4 +maxSize.y/4) * scale, Quaternion.Euler(90,0,0), mapHolder);
+        topMasker.localScale = new Vector3(maxSize.x, maxSize.y/2 - (float)currentMap.mapSize.y/2) * scale;
+        //下
+        Transform bottomMasker = Instantiate<Transform>(navmeshMasker, new Vector3(0, 0, -(float)currentMap.mapSize.y/4 -maxSize.y/4) * scale, Quaternion.Euler(90,0,0), mapHolder);
+        bottomMasker.localScale = new Vector3(maxSize.x, maxSize.y/2 - (float)currentMap.mapSize.y/2) * scale;
+
     }
     //判断一个网格图是否是单联通的
     bool MapIsOneConnected(bool[,] obstacles, int obstaclePlaced){

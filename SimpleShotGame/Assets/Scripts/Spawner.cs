@@ -86,6 +86,7 @@ public class Spawner : MonoBehaviour
         //生成敌人
         Enemy spawnedEnemy = Instantiate<Enemy>(enemy,tile.position + Vector3.up,Quaternion.identity);
         spawnedEnemy.OnDeath += OnEnemyDeath;//将OnEnemyDeath加入委托事件
+        spawnedEnemy.SetCharacteristics(currentWave.enemyHealth, currentWave.moveSpeed, currentWave.attackDamage, currentWave.skinColor);
         yield return null;
     }
 
@@ -124,5 +125,10 @@ public class Spawner : MonoBehaviour
     public class Wave{//每一波敌人的信息
         public int enemyCount;//敌人数目
         public float timeBetweenSpawn;//生成敌人间隔的时间(s)
+        public float moveSpeed;//敌人移动速度
+        public float attackDamage;//敌人攻击伤害
+        public float enemyHealth;//敌人的HP
+        public Color skinColor;//敌人的颜色
+
     }
 }
