@@ -369,12 +369,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb967621a19e1a44fb42872ed4db9401, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fireMode: 0
   muzzle: {fileID: 8952976814385315576}
   projectileSpeed: 35
   projectile: {fileID: 1562825380328224830, guid: c20dab4b7858c8a4d9702593c6811c7f,
     type: 3}
   shell: {fileID: 5551905896861436631, guid: 4173d74d2c3fbbe40aec8761d6a287ab, type: 3}
-  msBetweenShoot: 100
+  timeBetweenShoot: 0.2
 --- !u!114 &1967837081
 MonoBehaviour:
   m_ObjectHideFlags: 0

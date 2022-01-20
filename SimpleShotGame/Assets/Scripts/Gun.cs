@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
+    public enum FireMode { Auto, Burst, Single};
+    public FireMode fireMode;
     public Transform muzzle;//枪口
-    public float projectileSpeed = 35;//子弹深速度
+    public float projectileSpeed = 35;//子弹的速度
     public Projectile projectile;//子弹对象
     public Shell shell;//弹壳
     Transform shellPoint;//弹壳弹出点
-    public float msBetweenShoot = 100;//射击间隔
+    public float timeBetweenShoot = 0.1f;//射击间隔
 
     private float nextShootTime;
 
@@ -21,7 +23,7 @@ public class Gun : MonoBehaviour
     }
     public void Shoot(){
         if(Time.time > nextShootTime){
-            nextShootTime = Time.time + msBetweenShoot / 1000;//Time.time单位是s
+            nextShootTime = Time.time + timeBetweenShoot;//Time.time单位是s
             Projectile newProjectile = Instantiate<Projectile>(projectile, muzzle.position,muzzle.rotation);
             newProjectile.SetSpeed(projectileSpeed);
             //弹出弹壳
