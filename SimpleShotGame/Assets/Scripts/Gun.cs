@@ -14,12 +14,29 @@ public class Gun : MonoBehaviour
     public float timeBetweenShoot = 0.1f;//射击间隔
 
     private float nextShootTime;
+    //后坐力recoil
+    [Header("--后坐力")]
+    public Vector2  positionRecoil = new Vector2(.1f, .2f);//水平位移后坐力
+    public float positionRecoilRecoverTime = .1f;//水平位移后坐力的恢复时间
+    private Vector3 tempPositionRecoil;
+    public Vector2 rotationRecoil = new Vector2(3, 6);//枪口上扬的后坐力
+    public float maxRotationRecoil = 30;//枪口最大上扬角度
+    public float rotationRecoilRecoverTime = .1f;//枪口上扬恢复时间
+    private float tempRotationRecoil;
+    private float gunRotationValue = 0;
+
 
     FireFlash fireFlash;
 
     private void Start() {
         shellPoint = transform.Find("ShellPoint");
         fireFlash = GetComponent<FireFlash>();
+    }
+    private void Update() {
+        //处理后坐力，恢复回原状态
+        transform.localPosition = Vector3.SmoothDamp(transform.localPosition, Vector3.zero, ref tempPositionRecoil, positionRecoilRecoverTime);
+        gunRotationValue = Mathf.SmoothDamp(gunRotationValue, 0, ref tempRotationRecoil, rotationRecoilRecoverTime);
+        transform.localEulerAngles += Vector3.left * gunRotationValue;
     }
     public void Shoot(){
         if(Time.time > nextShootTime){
@@ -30,6 +47,10 @@ public class Gun : MonoBehaviour
             Instantiate<Shell>(shell, transform.position, transform.rotation);
             //枪口闪光
             fireFlash.Activate();
+            //后坐力
+            transform.localPosition += Vector3.back * Random.Range(positionRecoil.x, positionRecoil.y);
+            gunRotationValue += Random.Range(rotationRecoil.x, rotationRecoil.y);
+            gunRotationValue = Mathf.Clamp(gunRotationValue, 0, maxRotationRecoil);
         }
     }
     //瞄准

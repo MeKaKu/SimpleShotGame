@@ -376,6 +376,11 @@ MonoBehaviour:
     type: 3}
   shell: {fileID: 5551905896861436631, guid: 4173d74d2c3fbbe40aec8761d6a287ab, type: 3}
   timeBetweenShoot: 0.2
+  positionRecoil: 0.2
+  positionRecoilRecoverTime: 0.1
+  rotationRecoil: 5
+  maxRotationRecoil: 30
+  rotationRecoilRecoverTime: 0.1
 --- !u!114 &1967837081
 MonoBehaviour:
   m_ObjectHideFlags: 0

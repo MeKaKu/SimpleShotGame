@@ -636,7 +636,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waves:
-  - enemyCount: 3
+  - enemyCount: 0
     timeBetweenSpawn: 2
     moveSpeed: 3
     attackDamage: 1
