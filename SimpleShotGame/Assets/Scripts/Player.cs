@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Drawing;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,13 +31,19 @@ public class Player : People {
         //朝向
         Ray ray = viewCamera.ScreenPointToRay(Input.mousePosition);//从摄像机到屏幕上面的点的射线
         Plane groundPlane = new Plane(Vector3.up,Vector3.up * gunController.gunHeight);
+        //print(gunController.gunHeight);
         float rayDist;
         if(groundPlane.Raycast(ray,out rayDist)){
             Vector3 point = ray.GetPoint(rayDist);//与地面的交点
             //Debug.DrawLine(ray.origin,point,Color.red);
-            controller.LookAt(point);
-            cross.transform.position = point;
-            cross.DetectTargets(ray);
+            controller.LookAt(point);//玩家朝向
+            cross.transform.position = point;//准星位置
+            cross.DetectTargets(ray);//检查准星是否瞄准了敌人
+            //武器瞄准
+            if((new Vector2(transform.position.x,transform.position.z) - new Vector2(point.x,point.z)).sqrMagnitude
+                - (new Vector2(transform.position.x,transform.position.z) - new Vector2(gunController.transform.position.x,gunController.transform.position.z)).sqrMagnitude > 1){
+                gunController.AimAt(point);
+            }
         }
         //武器
         if(Input.GetMouseButton(0)){

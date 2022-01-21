@@ -5,6 +5,7 @@ using UnityEngine;
 public class CrossController : MonoBehaviour
 {
     public LayerMask targetMask;
+    public float rotateSpeed = 40;
     float speed = 40;//自旋速度
     SpriteRenderer dotRenderer;//准星中间的瞄准点
     Color originColor;//瞄准点的默认颜色
@@ -23,9 +24,11 @@ public class CrossController : MonoBehaviour
     public void DetectTargets(Ray ray){
         if(Physics.Raycast(ray,100,targetMask)){
             dotRenderer.color = highlightColor;
+            speed = rotateSpeed * 2;
         }
         else{
             dotRenderer.color = originColor;
+            speed = rotateSpeed;
         }
     }
 }

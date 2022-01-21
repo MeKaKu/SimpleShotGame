@@ -32,4 +32,8 @@ public class Gun : MonoBehaviour
             fireFlash.Activate();
         }
     }
+    //瞄准
+    public void Aim(Vector3 _point){
+        transform.LookAt(_point);
+    }
 }

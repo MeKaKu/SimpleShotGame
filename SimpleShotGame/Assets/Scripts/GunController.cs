@@ -27,6 +27,11 @@ public class GunController : MonoBehaviour
             equippedGun.Shoot();
         }
     }
+    public void AimAt(Vector3 _point){
+        if(equippedGun != null){
+            equippedGun.Aim(_point);
+        }
+    }
 
     //武器的高度
     public float gunHeight{
