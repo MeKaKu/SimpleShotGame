@@ -376,11 +376,15 @@ MonoBehaviour:
     type: 3}
   shell: {fileID: 5551905896861436631, guid: 4173d74d2c3fbbe40aec8761d6a287ab, type: 3}
   timeBetweenShoot: 0.2
-  positionRecoil: 0.2
+  positionRecoil: {x: 0.1, y: 0.2}
   positionRecoilRecoverTime: 0.1
-  rotationRecoil: 5
+  rotationRecoil: {x: 3, y: 6}
   maxRotationRecoil: 30
   rotationRecoilRecoverTime: 0.1
+  magazineCapacity: 10
+  reloadingTime: 0.8
+  shootingAudio: {fileID: 8300000, guid: fac59437641d2421e9f6ac845763b8a8, type: 3}
+  reloadingAudio: {fileID: 8300000, guid: d617432175d1a42b9adc26881cd90b15, type: 3}
 --- !u!114 &1967837081
 MonoBehaviour:
   m_ObjectHideFlags: 0

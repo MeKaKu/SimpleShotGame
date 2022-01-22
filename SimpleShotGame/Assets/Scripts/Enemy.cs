@@ -53,6 +53,8 @@ public class Enemy : People
                     nextAttackTime = Time.time + timeBetweenAttacks;
                     //攻击
                     StartCoroutine(Attack());
+                    //攻击音效
+                    AudioManager.instance.PlaySound("EnemyAttack", transform.position);
                 }
             }
         }
@@ -109,12 +111,19 @@ public class Enemy : People
         }
     }
 
+    //受到攻击
     public override void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection){
-        if(damage >= health){
+        if(damage >= health){//死亡
             //print("start lifetime : "+deathEffect.main.startLifetimeMultiplier);
             ParticleSystem effect = Instantiate<ParticleSystem>(deathEffect, hitPoint, Quaternion.FromToRotation(Vector3.forward, hitDirection));
             effect.GetComponent<Renderer>().material.color = originColor;
             Destroy(effect, deathEffect.main.startLifetimeMultiplier);
+            //死亡音效
+            AudioManager.instance.PlaySound("EnemyDeath", transform.position);
+        }
+        else{
+            //受击音效
+            AudioManager.instance.PlaySound("EnemyTakenDamage", hitPoint);
         }
         base.TakeHit(damage, hitPoint, hitDirection);
     }

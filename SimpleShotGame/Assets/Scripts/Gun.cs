@@ -26,10 +26,16 @@ public class Gun : MonoBehaviour
     private float gunRotationValue = 0;
 
     //弹匣
+    [Header("--弹匣")]
     public int magazineCapacity = 10;//弹匣容量
-    public float reloadingTime = 1;//换弹时间
+    public float reloadingTime = .8f;//换弹时间
     private int projectsRemainedInMagazine;//弹匣内剩余子弹数目
     bool isReloadingMagazine;//是否正在换弹
+
+    //音效
+    [Header("--音效")]
+    public AudioClip shootingAudio;
+    public AudioClip reloadingAudio;
 
 
     FireFlash fireFlash;
@@ -48,6 +54,7 @@ public class Gun : MonoBehaviour
             ReloadMagazine();
         }
     }
+    //射击
     public void Shoot(){
         if(Time.time > nextShootTime && projectsRemainedInMagazine > 0 && !isReloadingMagazine){
             nextShootTime = Time.time + timeBetweenShoot;//Time.time单位是s
@@ -63,12 +70,16 @@ public class Gun : MonoBehaviour
             gunRotationValue = Mathf.Clamp(gunRotationValue, 0, maxRotationRecoil);
             //弹匣里面的子弹数减一
             projectsRemainedInMagazine--;
+            //音效
+            AudioManager.instance.PlaySound(shootingAudio, transform.position);
         }
     }
     //换弹
     public void ReloadMagazine(){
         if(!isReloadingMagazine && projectsRemainedInMagazine < magazineCapacity){
             isReloadingMagazine = true;
+            //音效
+            AudioManager.instance.PlaySound(reloadingAudio, transform.position);
             StartCoroutine(AnimateReloadMagazine());
         }
     }

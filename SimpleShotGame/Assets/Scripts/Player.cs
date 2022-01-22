@@ -54,4 +54,9 @@ public class Player : People {
         }
     }
 
+    public override void Die(){
+        //玩家死亡音效
+        AudioManager.instance.PlaySound("PlayerDeath", transform.position);
+        base.Die();
+    }
 }

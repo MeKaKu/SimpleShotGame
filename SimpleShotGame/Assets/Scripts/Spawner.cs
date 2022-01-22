@@ -98,6 +98,10 @@ public class Spawner : MonoBehaviour
     }
 
     void nextWave(){ //设置下一波敌人信息
+        if(currentWaveNumber > 0){
+            //过关音效
+            AudioManager.instance.PlaySound("LevelCompleted", playerTransform.position);
+        }
         currentWaveNumber ++;//当前波数加一
         //print("Waves : " + currentWaveNumber);
         if(currentWaveNumber <= waves.Length){
