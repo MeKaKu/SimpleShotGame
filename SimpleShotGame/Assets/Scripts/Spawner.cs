@@ -106,11 +106,11 @@ public class Spawner : MonoBehaviour
             enemyRemainToSpawn = currentWave.enemyCount;
             enemyRemainAlive = enemyRemainToSpawn;
             if(OnNewWave!=null){
-                print("???");
+                //print("???");
                 OnNewWave(currentWaveNumber);
             }
-            mapGenerator.mapIndex = currentWaveNumber - 1;
-            mapGenerator.GenerateMap();
+            //mapGenerator.mapIndex = currentWaveNumber - 1;
+            //mapGenerator.GenerateMap();
             ResetPlayerPos();
         }
     }

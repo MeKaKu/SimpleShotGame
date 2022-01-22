@@ -23,16 +23,16 @@ public class MapGenerator : MonoBehaviour
     public int mapIndex;
     Map currentMap;//当前生成的地图
     Spawner spawner;
-    private void Start() {
-        //GenerateMap();
-        //spawner = FindObjectOfType<Spawner>();
-        //spawner.OnNewWave += OnNewWave;
+    private void Awake() {
+        GenerateMap();
+        spawner = FindObjectOfType<Spawner>();
+        spawner.OnNewWave += OnNewWave;
     }
-    // void OnNewWave(int newWaveIndex){
-    //     mapIndex = newWaveIndex - 1;
-    //     print(newWaveIndex);
-    //     GenerateMap();
-    // }
+    void OnNewWave(int newWaveIndex){
+        mapIndex = newWaveIndex - 1;
+        //print(newWaveIndex);
+        GenerateMap();
+    }
     public void GenerateMap(){
         currentMap = maps[mapIndex];//当前生成的地图
         System.Random rand = new System.Random(currentMap.seed);//获取一个随机数序列
