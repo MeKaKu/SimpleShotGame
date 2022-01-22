@@ -45,9 +45,12 @@ public class Player : People {
                 gunController.AimAt(point);
             }
         }
-        //武器
-        if(Input.GetMouseButton(0)){
+        //武器输入
+        if(Input.GetMouseButton(0)){//开火
             gunController.Shoot();
+        }
+        if(Input.GetKeyDown(KeyCode.R)){//换弹
+            gunController.ReloadMagazine();
         }
     }
 

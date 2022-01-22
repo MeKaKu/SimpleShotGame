@@ -21,15 +21,22 @@ public class GunController : MonoBehaviour
         equippedGun = Instantiate<Gun>(gunToEquip,weaponHolder.position,weaponHolder.rotation);
         equippedGun.gameObject.transform.parent = weaponHolder;
     }
-
+    //射击
     public void Shoot(){
         if(equippedGun != null){
             equippedGun.Shoot();
         }
     }
+    //瞄准
     public void AimAt(Vector3 _point){
         if(equippedGun != null){
             equippedGun.Aim(_point);
+        }
+    }
+    //换弹
+    public void ReloadMagazine(){
+        if(equippedGun != null){
+            equippedGun.ReloadMagazine();
         }
     }
 
