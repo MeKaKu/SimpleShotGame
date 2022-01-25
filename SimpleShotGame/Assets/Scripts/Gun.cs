@@ -29,7 +29,7 @@ public class Gun : MonoBehaviour
     [Header("--弹匣")]
     public int magazineCapacity = 10;//弹匣容量
     public float reloadingTime = .8f;//换弹时间
-    private int projectsRemainedInMagazine;//弹匣内剩余子弹数目
+    public int projectsRemainedInMagazine{get;private set;}//弹匣内剩余子弹数目
     bool isReloadingMagazine;//是否正在换弹
 
     //音效

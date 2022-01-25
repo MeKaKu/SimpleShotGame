@@ -42,7 +42,8 @@ public class Player : People {
             //武器瞄准
             if((new Vector2(transform.position.x,transform.position.z) - new Vector2(point.x,point.z)).sqrMagnitude
                 - (new Vector2(transform.position.x,transform.position.z) - new Vector2(gunController.transform.position.x,gunController.transform.position.z)).sqrMagnitude > 1){
-                gunController.AimAt(point);
+                    //print("okk");
+                gunController.AimAt(point);//bug：head shoot
             }
         }
         //武器输入

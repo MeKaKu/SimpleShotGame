@@ -4545,6 +4545,7 @@ MonoBehaviour:
   gameOverUI: {fileID: 744710023}
   waveBanner: {fileID: 1610763536}
   currentWaveInfo: {fileID: 994126097}
+  weaponInfo: {fileID: 1795728023}
 --- !u!1 &834180394
 GameObject:
   m_ObjectHideFlags: 0
@@ -7075,7 +7076,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1194621769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9360,7 +9361,7 @@ LightingSettings:
   m_PrefabAsset: {fileID: 0}
   m_Name: Settings.lighting
   serializedVersion: 3
-  m_GIWorkflowMode: 1
+  m_GIWorkflowMode: 0
   m_EnableBakedLightmaps: 1
   m_EnableRealtimeLightmaps: 0
   m_RealtimeEnvironmentLighting: 1

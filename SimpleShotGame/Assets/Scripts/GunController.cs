@@ -6,7 +6,7 @@ public class GunController : MonoBehaviour
 {
     public Gun initGun;
     public Transform weaponHolder;
-    Gun equippedGun;
+    public Gun equippedGun{get;private set;}
     void Start()
     {
         if(initGun!=null){

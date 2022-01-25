@@ -6,9 +6,9 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     public enum AudioType {Main, Sound, Music};
-    float mainVolumePercent = 1;//主音量
-    float soundVolumePercent = 1;//音效音量
-    float musicVolumePercent = .8f;//音乐声音大小
+    public float mainVolumePercent{get;private set;}//主音量
+    public float soundVolumePercent{get;private set;}//音效音量
+    public float musicVolumePercent{get;private set;}//音乐声音大小
 
     AudioSource[] musicSources;//音源数组，用来播放音乐
     AudioSource soundSource2D;//2D音效音源
@@ -37,13 +37,15 @@ public class AudioManager : MonoBehaviour
             soundSource2D = newSoundSource.AddComponent<AudioSource>();
             newSoundSource.transform.parent = transform;
 
-            player = FindObjectOfType<Player>().transform;//玩家
+            if(FindObjectOfType<Player>()){
+                player = FindObjectOfType<Player>().transform;//玩家
+            }
             listener = transform.Find("AudioListener");//声音接收对象
             audioLibrary = GetComponent<AudioLibrary>();//音频库
             //读取用户对音量设置
-            mainVolumePercent = PlayerPrefs.GetFloat("mainVolumePercent", mainVolumePercent);
-            soundVolumePercent = PlayerPrefs.GetFloat("soundVolumePercent", soundVolumePercent);
-            musicVolumePercent = PlayerPrefs.GetFloat("musicVolumePercent", musicVolumePercent);
+            mainVolumePercent = PlayerPrefs.GetFloat("mainVolumePercent",1f);
+            soundVolumePercent = PlayerPrefs.GetFloat("soundVolumePercent", 1f);
+            musicVolumePercent = PlayerPrefs.GetFloat("musicVolumePercent", 1f);
         }
         else{
             Destroy(gameObject);
@@ -70,6 +72,7 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.SetFloat("mainVolumePercent", mainVolumePercent);
         PlayerPrefs.SetFloat("soundVolumePercent", soundVolumePercent);
         PlayerPrefs.SetFloat("musicVolumePercent", musicVolumePercent);
+        PlayerPrefs.Save();//保存玩家的设置
     }
 
     private void Update() {

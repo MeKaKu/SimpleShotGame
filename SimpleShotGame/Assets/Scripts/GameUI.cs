@@ -14,6 +14,7 @@ public class GameUI : MonoBehaviour
 
     public RectTransform waveBanner;//关卡提示UI
     public Text currentWaveInfo;//关卡信息
+    public Text weaponInfo;//武器信息
     Spawner spawner;
 
     private void Awake() {
@@ -21,6 +22,13 @@ public class GameUI : MonoBehaviour
         player.OnDeath += OnPlayerDeath;
         spawner = GameObject.FindObjectOfType<Spawner>();
         spawner.OnNewWave += OnNewWave;
+    }
+
+    private void Update() {
+        Gun gun = player.GetComponent<GunController>().equippedGun;
+        if(gun != null){
+            weaponInfo.text = gun.projectsRemainedInMagazine + "/" + gun.magazineCapacity;
+        }
     }
 
     //游戏结束
