@@ -12,7 +12,7 @@ public class Player : People {
     PlayerController controller;
     GunController gunController;
     Camera viewCamera;
-    // Start is called before the first frame update
+    public event System.Action OnTakeDamage;//受伤事件
     protected override void Start(){
         base.Start();
         controller = GetComponent<PlayerController>();
@@ -53,6 +53,13 @@ public class Player : People {
         if(Input.GetKeyDown(KeyCode.R)){//换弹
             gunController.ReloadMagazine();
         }
+    }
+
+    public override void TakeDamage(float damage){
+        if(OnTakeDamage != null){
+            OnTakeDamage();
+        }
+        base.TakeDamage(damage);
     }
 
     public override void Die(){

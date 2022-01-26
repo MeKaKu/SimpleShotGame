@@ -6,6 +6,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class Enemy : People
 {
+    public static event System.Action OnDeathStatic;//静态事件
     public ParticleSystem deathEffect;
     public enum State{
         Idle,Chasing,Attacking
@@ -114,6 +115,9 @@ public class Enemy : People
     //受到攻击
     public override void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection){
         if(damage >= health){//死亡
+            if(OnDeathStatic != null){
+                OnDeathStatic();//敌人死亡事件
+            }
             //print("start lifetime : "+deathEffect.main.startLifetimeMultiplier);
             ParticleSystem effect = Instantiate<ParticleSystem>(deathEffect, hitPoint, Quaternion.FromToRotation(Vector3.forward, hitDirection));
             effect.GetComponent<Renderer>().material.color = originColor;

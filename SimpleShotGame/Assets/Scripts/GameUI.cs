@@ -10,27 +10,61 @@ public class GameUI : MonoBehaviour
 {
     public Image fadePlane;//黑屏
     public GameObject gameOverUI;//游戏结束的UI
-    People player;//玩家
+    Player player;//玩家
 
     public RectTransform waveBanner;//关卡提示UI
     public Text currentWaveInfo;//关卡信息
     public Text weaponInfo;//武器信息
+
+    public Text ScoreUI;//得分
+    public Image healthBar;//玩家血条
+    public Image healthBarDis;
     Spawner spawner;
 
     private void Awake() {
-        player = GameObject.FindObjectOfType<People>();
+        player = GameObject.FindObjectOfType<Player>();
         player.OnDeath += OnPlayerDeath;
+        player.OnTakeDamage += OnPlayerTakeDamage;
         spawner = GameObject.FindObjectOfType<Spawner>();
         spawner.OnNewWave += OnNewWave;
     }
 
     private void Update() {
-        Gun gun = player.GetComponent<GunController>().equippedGun;
-        if(gun != null){
-            weaponInfo.text = gun.projectsRemainedInMagazine + "/" + gun.magazineCapacity;
+        float healthPercent = 0;
+        if(player != null){
+            Gun gun = player.GetComponent<GunController>().equippedGun;
+            if(gun != null){
+                weaponInfo.text = gun.projectsRemainedInMagazine + "/" + gun.magazineCapacity;
+            }
+
+            ScoreUI.text = ScoreManager.score.ToString("D6");
+
+            healthPercent = player.health / player.startingHealth;
         }
+        healthBar.transform.localScale = new Vector3(healthPercent, 1, 1);//玩家血条
     }
 
+    //玩家受伤血条变化
+    void OnPlayerTakeDamage(){
+        //healthBarDis.transform.localScale = healthBar.transform.localScale;
+        StopCoroutine("AnimateHealthBar");
+        StartCoroutine("AnimateHealthBar");
+    }
+    //血条变化的动画
+    IEnumerator AnimateHealthBar(){
+        healthBarDis.CrossFadeAlpha(1, .1f, true);
+        yield return new WaitForSeconds(.1f);
+        healthBarDis.CrossFadeAlpha(0, 1, true);
+        float fadingTime = 1f;
+        float percent = 0;
+        Vector3 originScale = healthBarDis.transform.localScale;
+        Vector3 targetScale = healthBar.transform.localScale;
+        while(percent < 1){
+            percent += Time.deltaTime / fadingTime;
+            healthBarDis.transform.localScale = Vector3.Lerp(originScale, targetScale, percent);
+            yield return null;
+        }
+    }
     //游戏结束
     void OnPlayerDeath(){
         float speed = .5f;
@@ -48,7 +82,7 @@ public class GameUI : MonoBehaviour
     }
     //关卡信息
     void OnNewWave(int waveNumber){
-        currentWaveInfo.text = "- Wave " + waveNumber.ToString() + " -";
+        currentWaveInfo.text = "- 关卡 " + waveNumber.ToString() + " -";
         StartCoroutine(AnimateNewWave());
     }
     IEnumerator AnimateNewWave(){

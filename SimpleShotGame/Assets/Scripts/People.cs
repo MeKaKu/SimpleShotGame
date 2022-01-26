@@ -5,7 +5,7 @@ using UnityEngine;
 public class People : MonoBehaviour, IDamageable
 {
     public float startingHealth;
-    protected float health;
+    public float health {get; private set;}
     protected bool dead;
 
     public event System.Action OnDeath;//事件委托
@@ -16,7 +16,7 @@ public class People : MonoBehaviour, IDamageable
     public virtual void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection){
         TakeDamage(damage);
     }
-    public void TakeDamage(float damage){
+    public virtual void TakeDamage(float damage){
         health -= damage;
         if(health<=0 && !dead){
             Die();
