@@ -9,6 +9,7 @@ public class ScoreManager : MonoBehaviour
     float bonusExpiryTime = 1f;//连击有效时间
     int bonusCount;//连击数目
     private void Start() {
+        score = 0;
         Enemy.OnDeathStatic += OnEnemyKilled;
         FindObjectOfType<Player>().OnDeath += OnPlayerDeath;
     }

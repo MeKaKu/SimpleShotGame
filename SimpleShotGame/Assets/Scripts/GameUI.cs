@@ -37,7 +37,7 @@ public class GameUI : MonoBehaviour
                 weaponInfo.text = gun.projectsRemainedInMagazine + "/" + gun.magazineCapacity;
             }
 
-            ScoreUI.text = ScoreManager.score.ToString("D6");
+            ScoreUI.text = ScoreManager.score.ToString("D6"); //分数
 
             healthPercent = player.health / player.startingHealth;
         }
@@ -69,6 +69,7 @@ public class GameUI : MonoBehaviour
     void OnPlayerDeath(){
         float speed = .5f;
         StartCoroutine(Fade(Color.clear, Color.black, speed));
+        ScoreUI.rectTransform.anchoredPosition = Vector2.zero;
         gameOverUI.SetActive(true);
     }
     //黑屏动画
@@ -107,5 +108,8 @@ public class GameUI : MonoBehaviour
     //UI Input
     public void StartNewGame(){
         SceneManager.LoadScene("SampleScene");
+    }
+    public void BackToMenu(){
+        SceneManager.LoadScene("MenuScene");
     }
 }
